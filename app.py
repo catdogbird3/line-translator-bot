@@ -3,10 +3,10 @@ import requests
 import os
 import uuid
 import json
-from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
-from linebot.v3.webhook import WebhookHandler
+from linebot.v3.messaging import MessagingApi, Configuration, ApiClient, TextMessage
+from linebot.v3.webhook import WebhookHandler, MessageEvent
 from linebot.v3.exceptions import InvalidSignatureError
-from linebot.v3.messaging.models import ReplyMessageRequest, TextMessage
+from linebot.v3.messaging.models import ReplyMessageRequest, TextMessageContent
 
 app = Flask(__name__)
 
@@ -76,7 +76,7 @@ def callback():
         abort(500)
     return 'OK'
 
-@handler.add("message", "text")
+@handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     try:
         user_text = event.message.text
