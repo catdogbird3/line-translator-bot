@@ -13,8 +13,8 @@ app = Flask(__name__)
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
 LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 TRANSLATOR_KEY = os.getenv('TRANSLATOR_KEY')
-TRANSLATOR_ENDPOINT = os.getenv('TRANSLATOR_ENDPOINT')  # https://eastasia.api.cognitive.microsoft.com
-TRANSLATOR_LOCATION = os.getenv('TRANSLATOR_LOCATION')  # eastasia
+TRANSLATOR_ENDPOINT = os.getenv('TRANSLATOR_ENDPOINT')
+TRANSLATOR_LOCATION = os.getenv('TRANSLATOR_LOCATION') 
 
 # 初始化 LINE BOT
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
@@ -95,15 +95,20 @@ def test_line_api():
 def callback():
     try:
         signature = request.headers['X-Line-Signature']
+        print(f"收到 Signature: {signature}")
+
         body = request.get_data(as_text=True)
-        print(f"Request Body: {body}")
+        print(f"收到 LINE Webhook Body: {body}")
+
         handler.handle(body, signature)
+        print("Webhook handler 處理成功")
     except InvalidSignatureError:
-        print("Signature Error!")
+        print("❌ Invalid Signature Error")
         abort(400)
     except Exception as e:
-        print(f"Webhook Error: {e}")
+        print(f"❌ Webhook Exception: {e}")
         abort(500)
+
     return 'OK'
     
 # 呼叫 LINE API 測試    
@@ -112,16 +117,21 @@ test_line_api()
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
+        print("✅ 收到 LINE Message Event")
         user_text = event.message.text
-        print(f"Received message: {user_text}")
+        print(f"使用者傳來: {user_text}")
+
         translated_text = translate_text(user_text)
-        print(f"Translated: {translated_text}")
+        print(f"翻譯後: {translated_text}")
+
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=translated_text)
         )
+        print("✅ 回覆使用者完成")
     except Exception as e:
-        print(f"Error in handle_message: {e}")
+        print(f"❌ Error in handle_message: {e}")
+
 
 # --- 啟動 Flask ---
 if __name__ == "__main__":
