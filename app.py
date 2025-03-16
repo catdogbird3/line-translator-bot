@@ -83,6 +83,14 @@ def translate_text(text):
         return "Translation failed"
 
 # --- LINE Webhook ---
+def test_line_api():
+    try:
+        profile = line_bot_api.get_bot_info()
+        print("✅ LINE API Token 測試成功！")
+        print(f"Bot Name: {profile.basic_id}")
+    except Exception as e:
+        print(f"❌ LINE API Token 測試失敗: {e}")
+
 @app.route("/callback", methods=['POST'])
 def callback():
     try:
@@ -97,7 +105,9 @@ def callback():
         print(f"Webhook Error: {e}")
         abort(500)
     return 'OK'
-
+    
+# 呼叫 LINE API 測試    
+test_line_api()
 # --- 處理訊息事件 ---
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
