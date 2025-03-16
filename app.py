@@ -55,7 +55,7 @@ test_translator_key()
 
 # --- 翻譯函數 ---
 def translate_text(text):
-    path = '/translator/text/v3.0/translate'
+    path = '/translate'
     constructed_url = TRANSLATOR_ENDPOINT + path
 
     params = {
