@@ -87,8 +87,7 @@ def handle_message(event):
         print(f"Error in handle_message: {e}")
 
 def translate_text(text):
-    path = '/translate'
-    constructed_url = TRANSLATOR_ENDPOINT + path
+    constructed_url = TRANSLATOR_ENDPOINT
     params = {
         'api-version': '3.0',
         'to': ['en']
