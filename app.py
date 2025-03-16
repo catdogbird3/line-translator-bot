@@ -20,28 +20,35 @@ TRANSLATOR_LOCATION = os.getenv('TRANSLATOR_LOCATION')
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    signature = request.headers['X-Line-Signature']
-    body = request.get_data(as_text=True)
-
     try:
+        signature = request.headers['X-Line-Signature']
+        body = request.get_data(as_text=True)
+        print(f"Request Body: {body}")  # 印出 LINE 傳進來的訊息
+
         handler.handle(body, signature)
     except InvalidSignatureError:
+        print("Signature Error!")  # 簽名驗證錯
         abort(400)
     except Exception as e:
-        print(f"Error: {e}")  # 新增這行，把錯誤打到 log
+        print(f"Unhandled Error: {e}")  # **這裡可以看到所有錯誤**
         abort(500)
 
     return 'OK'
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    user_text = event.message.text
-    translated = translate_text(user_text)
-    reply = f"[EN] {translated}"
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply)
-    )
+    try:
+        user_text = event.message.text
+        print(f"Received message: {user_text}")
+        translated_text = translate_text(user_text)
+        print(f"Translated: {translated_text}")
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=translated_text)
+        )
+    except Exception as e:
+        print(f"Error in handle_message: {e}")
 
 def translate_text(text):
     path = '/translate'
