@@ -54,7 +54,6 @@ def test_translator_key():
 
     try:
         response = requests.post(constructed_url, params=params, headers=headers, json=body)
-        print(f"Translator API Response: {response.status_code} {response.text}")
         response.raise_for_status()
         print("✅ Translator API Key 測試成功！")
     except Exception as e:
@@ -76,7 +75,7 @@ def callback():
         abort(500)
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessageContent)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
         user_text = event.message.text
