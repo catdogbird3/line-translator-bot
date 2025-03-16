@@ -5,6 +5,33 @@ from linebot.exceptions import InvalidSignatureError
 import requests
 import os
 
+def test_translator_key():
+    endpoint = os.getenv('TRANSLATOR_ENDPOINT')
+    key = os.getenv('TRANSLATOR_KEY')
+    location = os.getenv('TRANSLATOR_LOCATION')
+    
+    test_url = endpoint + '/translate'
+    params = {
+        'api-version': '3.0',
+        'to': ['en']
+    }
+    headers = {
+        'Ocp-Apim-Subscription-Key': key,
+        'Ocp-Apim-Subscription-Region': location,
+        'Content-type': 'application/json'
+    }
+    body = [{'text': 'Hello'}]
+    
+    try:
+        response = requests.post(test_url, params=params, headers=headers, json=body)
+        if response.status_code == 200:
+            print("✅ Translator API Key is valid!")
+        else:
+            print(f"❌ Translator API Key test failed! Status: {response.status_code}, Response: {response.text}")
+    except Exception as e:
+        print(f"❌ Error testing Translator API Key: {e}")
+
+
 app = Flask(__name__)
 # 呼叫測試 Translator Key
 test_translator_key()
@@ -42,31 +69,6 @@ def callback():
         abort(500)
 
     return 'OK'
-def test_translator_key():
-    endpoint = os.getenv('TRANSLATOR_ENDPOINT')
-    key = os.getenv('TRANSLATOR_KEY')
-    location = os.getenv('TRANSLATOR_LOCATION')
-    
-    test_url = endpoint + '/translate'
-    params = {
-        'api-version': '3.0',
-        'to': ['en']
-    }
-    headers = {
-        'Ocp-Apim-Subscription-Key': key,
-        'Ocp-Apim-Subscription-Region': location,
-        'Content-type': 'application/json'
-    }
-    body = [{'text': 'Hello'}]
-    
-    try:
-        response = requests.post(test_url, params=params, headers=headers, json=body)
-        if response.status_code == 200:
-            print("✅ Translator API Key is valid!")
-        else:
-            print(f"❌ Translator API Key test failed! Status: {response.status_code}, Response: {response.text}")
-    except Exception as e:
-        print(f"❌ Error testing Translator API Key: {e}")
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
