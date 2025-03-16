@@ -18,6 +18,12 @@ TRANSLATOR_KEY = os.getenv('TRANSLATOR_KEY')
 TRANSLATOR_ENDPOINT = os.getenv('TRANSLATOR_ENDPOINT')
 TRANSLATOR_LOCATION = os.getenv('TRANSLATOR_LOCATION')
 
+print(f"LINE_CHANNEL_ACCESS_TOKEN: {os.getenv('LINE_CHANNEL_ACCESS_TOKEN')}")
+print(f"LINE_CHANNEL_SECRET: {os.getenv('LINE_CHANNEL_SECRET')}")
+print(f"TRANSLATOR_KEY: {os.getenv('TRANSLATOR_KEY')}")
+print(f"TRANSLATOR_ENDPOINT: {os.getenv('TRANSLATOR_ENDPOINT')}")
+print(f"TRANSLATOR_LOCATION: {os.getenv('TRANSLATOR_LOCATION')}")
+
 @app.route("/callback", methods=['POST'])
 def callback():
     try:
