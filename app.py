@@ -22,7 +22,7 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 # --- Translator Key 測試 ---
 def test_translator_key():
-    path = '/translator/text/v3.0/translate'
+    path = '/translate'
     constructed_url = TRANSLATOR_ENDPOINT + path
 
     params = {
