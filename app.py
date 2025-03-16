@@ -97,7 +97,7 @@ def translate_text(text):
     if len(text) > 5000:
         return "❌ 超過 5,000 字元限制，請分段翻譯！"
 
-    path = "/translate"
+    path = "translate"
     constructed_url = TRANSLATOR_ENDPOINT + path
 
     # 使用 "from": "auto" 讓 Azure 自動偵測語言
