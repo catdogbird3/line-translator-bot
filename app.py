@@ -27,6 +27,10 @@ def callback():
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
+    except Exception as e:
+        print(f"Error: {e}")  # 新增這行，把錯誤打到 log
+        abort(500)
+
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
