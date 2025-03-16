@@ -51,25 +51,37 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    """當用戶發送訊息時，翻譯成英文後回覆"""
+    """當收到群組訊息時，顯示其他人傳送的訊息"""
     try:
-        user_text = event.message.text
-        translated_text = translate_text(user_text)
+        user_id = event.source.user_id  # 取得傳訊息的用戶 ID
+        group_id = event.source.group_id if hasattr(event.source, "group_id") else "私聊"
+        user_message = event.message.text  # 使用者的訊息
+        
+        # 嘗試獲取用戶名稱（僅適用於群組）
+        display_name = "未知用戶"
+        if group_id != "私聊":
+            with ApiClient(configuration) as api_client:
+                line_bot_api = MessagingApi(api_client)
+                profile = line_bot_api.get_group_member_profile(group_id, user_id)
+                display_name = profile.display_name
 
+        # 組合回覆訊息
+        reply_text = f"📢 {display_name} 說：{user_message}"
+        
+        # 回應到群組
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             line_bot_api.reply_message(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=f"📝 翻譯結果: {translated_text}")]
+                    messages=[TextMessage(text=reply_text)]
                 )
             )
 
-        print(f"✅ 翻譯成功：{user_text} → {translated_text}")
+        print(f"✅ 來自群組 {group_id} 的訊息：{display_name} 說 {user_message}")
 
     except Exception as e:
         print(f"❌ Error in handle_message: {e}")
-
 def translate_text(text):
     """使用 Azure Translator API 進行翻譯"""
     path = "/translate"
