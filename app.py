@@ -33,8 +33,7 @@ def test_translator_key():
 
 
 app = Flask(__name__)
-# 呼叫測試 Translator Key
-test_translator_key()
+
 
 # LINE
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
@@ -46,6 +45,9 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 TRANSLATOR_KEY = os.getenv('TRANSLATOR_KEY')
 TRANSLATOR_ENDPOINT = os.getenv('TRANSLATOR_ENDPOINT')
 TRANSLATOR_LOCATION = os.getenv('TRANSLATOR_LOCATION')
+
+# 呼叫測試 Translator Key
+test_translator_key()
 
 print(f"LINE_CHANNEL_ACCESS_TOKEN: {os.getenv('LINE_CHANNEL_ACCESS_TOKEN')}")
 print(f"LINE_CHANNEL_SECRET: {os.getenv('LINE_CHANNEL_SECRET')}")
