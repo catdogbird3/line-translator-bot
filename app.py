@@ -3,10 +3,10 @@ import requests
 import os
 import uuid
 import json
-from linebot.v3.messaging import MessagingApi, Configuration, ApiClient, TextMessage
+from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
 from linebot.v3.webhook import WebhookHandler, MessageEvent
 from linebot.v3.exceptions import InvalidSignatureError
-from linebot.v3.messaging.models import ReplyMessageRequest, TextMessageContent
+from linebot.v3.messaging.models import ReplyMessageRequest, TextMessage
 
 app = Flask(__name__)
 
