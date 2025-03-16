@@ -52,13 +52,13 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    """當收到群組訊息時，自動偵測語言並翻譯"""
+    """當收到群組訊息時，翻譯成英文並回應"""
     try:
         user_id = event.source.user_id  # 取得發訊息者的 ID
         group_id = event.source.group_id if hasattr(event.source, "group_id") else "私聊"
         user_message = event.message.text  # 取得訊息內容
         
-        # 翻譯訊息（自動判斷中英文）
+        # 翻譯訊息
         translated_text = translate_text(user_message)
 
         # 嘗試獲取用戶名稱（僅適用於群組）
@@ -82,21 +82,23 @@ def handle_message(event):
                 )
             )
 
-        print(f"✅ 翻譯成功：{display_name} 說 {translated_text}")
+        print(f"✅ 翻譯成功：{display_name} 說 {user_message} → {translated_text}")
 
     except Exception as e:
         print(f"❌ Error in handle_message: {e}")
+        
+def translate_text(text):
+    """使用 Azure Translator API 進行翻譯"""
+    if len(text) > 5000:
+        return "❌ 超過 5,000 字元限制，請分段翻譯！"
 
     path = "/translate"
     constructed_url = TRANSLATOR_ENDPOINT + path
 
-    # 使用 "from": "auto" 讓 Azure 自動偵測語言
     params = {
         'api-version': '3.0',
-        'from': 'auto',  # 自動偵測來源語言
-        'to': ['zh' if is_english(text) else 'en']  # 如果是英文，翻譯成中文；如果是其他語言，翻成英文
+        'to': ['en']
     }
-    
     headers = {
         'Ocp-Apim-Subscription-Key': TRANSLATOR_KEY,
         'Ocp-Apim-Subscription-Region': TRANSLATOR_LOCATION,
