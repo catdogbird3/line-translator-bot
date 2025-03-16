@@ -82,22 +82,12 @@ def handle_message(event):
                 )
             )
 
-        print(f"✅ 翻譯成功：{display_name} 說 {user_message} → {translated_text}")
+        print(f"✅ 翻譯成功：{display_name} 說 {translated_text}")
 
     except Exception as e:
         print(f"❌ Error in handle_message: {e}")
 
-
-def is_english(text):
-    """判斷輸入是否主要為英文"""
-    return bool(re.search(r'[a-zA-Z]', text))
-    
-def translate_text(text):
-    """自動偵測語言，並翻譯成對應語言"""
-    if len(text) > 5000:
-        return "❌ 超過 5,000 字元限制，請分段翻譯！"
-
-    path = "translate"
+    path = "/translate"
     constructed_url = TRANSLATOR_ENDPOINT + path
 
     # 使用 "from": "auto" 讓 Azure 自動偵測語言
