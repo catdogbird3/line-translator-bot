@@ -10,7 +10,7 @@ def test_translator_key():
     key = os.getenv('TRANSLATOR_KEY')
     location = os.getenv('TRANSLATOR_LOCATION')
     
-    test_url = endpoint + '/translate'
+    test_url = endpoint
     params = {
         'api-version': '3.0',
         'to': ['en']
