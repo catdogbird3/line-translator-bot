@@ -7,6 +7,7 @@ from linebot.v3.messaging import MessagingApi, Configuration, ApiClient
 from linebot.v3.webhook import WebhookHandler, MessageEvent
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging.models import ReplyMessageRequest, TextMessage
+from linebot.v3.exceptions import ApiException
 
 app = Flask(__name__)
 
@@ -31,12 +32,13 @@ configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 def test_line_api():
+    messaging_api = MessagingApi(LINE_CHANNEL_ACCESS_TOKEN)
     try:
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            profile = line_bot_api.get_bot_info()
-            print(f"✅ LINE API 測試成功！Bot ID: {profile.bot_id}")
-    except Exception as e:
+        profile = messaging_api.get_bot_info()
+        print(f"✅ LINE API Token 測試成功！")
+        print(f"🔹 Bot Name: {profile.display_name}")
+        print(f"🔹 Bot Picture: {profile.picture_url}")  # 機器人頭像
+    except ApiException as e:
         print(f"❌ LINE API 測試失敗: {e}")
 
 def test_translator_key():
