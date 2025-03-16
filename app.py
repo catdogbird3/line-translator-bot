@@ -69,7 +69,7 @@ def handle_message(event):
                 display_name = profile.display_name
 
         # 組合回覆訊息（翻譯後的內容）
-        reply_text = f"📢 {display_name} 說（翻譯）：{translated_text}"
+        reply_text = f"📢 {display_name} 說：{translated_text}"
         
         # 回覆訊息到群組
         with ApiClient(configuration) as api_client:
